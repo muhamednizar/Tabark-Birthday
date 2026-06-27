@@ -26,7 +26,7 @@
 
     <div class="lock-card">
       <div class="lock-emoji">🎀</div>
-      <h2 class="lock-title">مفاجأة بتستناكِ</h2>
+      <h2 class="lock-title">مفاجأة مش كده ؟</h2>
       <p class="lock-sub">في يوم ٢ يوليو الساعة ١٢ الليل</p>
 
       <div class="cd-grid" id="cdGrid">
@@ -176,6 +176,58 @@
 
 
   <!-- ══════════════════════════════════════════
+       القسم ٢.٥ — الرسالة الصوتية
+  ══════════════════════════════════════════ -->
+  <section class="s-voice reveal-section" id="s-voice">
+    <div class="section-label">🎙️ رسالة صوتية</div>
+    <h2 class="section-title">رسالة من شخصك المفضل</h2>
+    <p class="section-sub">دوسي عشان تسمعي الرسالة 🎀</p>
+
+    <div class="voice-card">
+      <!-- Decorative top -->
+      <div class="voice-deco">
+        <span class="voice-icon" id="voiceIcon">🎙️</span>
+        <div class="voice-rings">
+          <span class="vring vring1"></span>
+          <span class="vring vring2"></span>
+          <span class="vring vring3"></span>
+        </div>
+      </div>
+
+      <p class="voice-label">محمد بيقولك ...</p>
+
+      <!-- Custom player -->
+      <audio id="voiceAudio" src="record1.mp3" preload="metadata"></audio>
+
+      <div class="vplayer">
+        <button class="vplay-btn" id="vPlayBtn" onclick="toggleVoice()">
+          <svg id="vPlayIcon" viewBox="0 0 24 24" fill="currentColor" width="28" height="28"><path d="M8 5v14l11-7z"/></svg>
+          <svg id="vPauseIcon" viewBox="0 0 24 24" fill="currentColor" width="28" height="28" style="display:none"><path d="M6 19h4V5H6zm8-14v14h4V5z"/></svg>
+        </button>
+
+        <!-- Waveform bars (animated while playing) -->
+        <div class="vwave" id="vWave">
+          <span></span><span></span><span></span><span></span>
+          <span></span><span></span><span></span><span></span>
+          <span></span><span></span><span></span><span></span>
+        </div>
+
+        <div class="vprogress-wrap" id="vProgressWrap" onclick="seekVoice(event)">
+          <div class="vprogress-bg"></div>
+          <div class="vprogress-fill" id="vFill"></div>
+          <div class="vprogress-dot" id="vDot"></div>
+        </div>
+
+        <div class="vtime">
+          <span id="vCurrent">0:00</span>
+          <span id="vDuration">0:00</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════════════════════
        القسم ٣ — الكارتات التفاعلية
   ══════════════════════════════════════════ -->
   <section class="s-cards reveal-section" id="s-cards">
@@ -189,7 +241,7 @@
         <div class="flip-card-inner">
           <div class="flip-front">
             <div class="flip-icon">🌸</div>
-            <p class="flip-front-text">يا نور عيوننا</p>
+            <p class="flip-front-text">يا نور عيوني</p>
             <span class="flip-hint">اضغطي عشان تقري ↓</span>
           </div>
           <div class="flip-back">
@@ -219,7 +271,7 @@
             <span class="flip-hint">اضغطي عشان تقري ↓</span>
           </div>
           <div class="flip-back">
-            <p>ربنا يحقق كل أمانيكِ ويرزقك بكل ما تتمنيه، ويخليكي دايمًا فرحانة وضاحكة وعيشة 💕</p>
+            <p>ربنا يحقق كل امنياتك ويرزقك بكل اللي تتمنيه ويخليكي دايمًا فرحانة ومبسوطة  💕</p>
           </div>
         </div>
       </div>
@@ -232,7 +284,7 @@
             <span class="flip-hint">اضغطي عشان تقري ↓</span>
           </div>
           <div class="flip-back">
-            <p>هنكون دايمًا جنبك وهندعيلك من قلبنا. ربنا يكرمك ويعلي شأنك ويجعل عمرك كله نور وسعادة 🌟</p>
+            <p>هكون دايمًا جنبك وهبسطك وهجيبلك كل الي بتحلمي بيه لحد عندك 🌟</p>
           </div>
         </div>
       </div>
@@ -249,14 +301,50 @@
     <h2 class="section-title">ذكريات مش هننساها</h2>
     <p class="section-sub">كل صورة بتحكي قصة حلوة 💕</p>
 
-    <div class="gallery-mosaic">
-      <div class="gal-item g1"><img src="images/IMG20250217145224.jpg" class="gal-img" alt="لحظة مميزة"></div>
-      <div class="gal-item g2"><img src="images/WhatsApp Image 2026-06-26 at 11.36.16 PM.jpeg" class="gal-img" alt="أجمل ذكرياتنا"></div>
-      <div class="gal-item g3"><img src="images/WhatsApp Image 2026-06-26 at 11.36.13 PM.jpeg" class="gal-img" alt="أيام متتنسيش"></div>
-      <div class="gal-item g4"><img src="images/WhatsApp Image 2026-06-26 at 11.36.21 PM.jpeg" class="gal-img" alt="ابتسامة قمر"></div>
-      <div class="gal-item g5"><img src="images/WhatsApp Image 2026-06-26 at 11.36.10 PM.jpeg" class="gal-img" alt="أحلى الأوقات"></div>
+    <p class="scroll-hint">← فري يمين وشمال يا بتت🎀 →</p>
+
+    <div class="gallery-strip" id="galleryStrip">
+      <div class="gal-item" onclick="openLightbox('images/WhatsApp Image 2026-06-26 at 11.36.20 PM (2).jpeg')"><img src="images/WhatsApp Image 2026-06-26 at 11.36.20 PM (2).jpeg" class="gal-img" alt="لحظة مميزة"></div>
+      <div class="gal-item" onclick="openLightbox('images/WhatsApp Image 2026-06-26 at 11.36.20 PM (3).jpeg')"><img src="images/WhatsApp Image 2026-06-26 at 11.36.20 PM (3).jpeg" class="gal-img" alt="لحظة مميزة"></div>
+      <div class="gal-item" onclick="openLightbox('images/WhatsApp Image 2026-06-26 at 11.36.20 PM.jpeg')"><img src="images/WhatsApp Image 2026-06-26 at 11.36.20 PM.jpeg" class="gal-img" alt="لحظة مميزة"></div>
+      <div class="gal-item" onclick="openLightbox('images/WhatsApp Image 2026-06-26 at 11.36.21 PM.jpeg')"><img src="images/WhatsApp Image 2026-06-26 at 11.36.21 PM.jpeg" class="gal-img" alt="لحظة مميزة"></div>
+      <div class="gal-item" onclick="openLightbox('images/WhatsApp Image 2026-06-26 at 11.36.21 PM (1).jpeg')"><img src="images/WhatsApp Image 2026-06-26 at 11.36.21 PM (1).jpeg" class="gal-img" alt="لحظة مميزة"></div>
+      <div class="gal-item" onclick="openLightbox('images/WhatsApp Image 2026-06-26 at 11.36.21 PM (2).jpeg')"><img src="images/WhatsApp Image 2026-06-26 at 11.36.21 PM (2).jpeg" class="gal-img" alt="لحظة مميزة"></div>
+      <div class="gal-item" onclick="openLightbox('images/WhatsApp Image 2026-06-26 at 11.35.54 PM.jpeg')"><img src="images/WhatsApp Image 2026-06-26 at 11.35.54 PM.jpeg" class="gal-img" alt="لحظة مميزة"></div>
+      <div class="gal-item" onclick="openLightbox('images/WhatsApp Image 2026-06-26 at 11.35.54 PM (1).jpeg')"><img src="images/WhatsApp Image 2026-06-26 at 11.35.54 PM (1).jpeg" class="gal-img" alt="لحظة مميزة"></div>
+      <div class="gal-item" onclick="openLightbox('images/WhatsApp Image 2026-06-26 at 11.35.56 PM.jpeg')"><img src="images/WhatsApp Image 2026-06-26 at 11.35.56 PM.jpeg" class="gal-img" alt="لحظة مميزة"></div>
+      <div class="gal-item" onclick="openLightbox('images/WhatsApp Image 2026-06-26 at 11.35.57 PM.jpeg')"><img src="images/WhatsApp Image 2026-06-26 at 11.35.57 PM.jpeg" class="gal-img" alt="لحظة مميزة"></div>
+      <div class="gal-item" onclick="openLightbox('images/WhatsApp Image 2026-06-26 at 11.35.57 PM (1).jpeg')"><img src="images/WhatsApp Image 2026-06-26 at 11.35.57 PM (1).jpeg" class="gal-img" alt="لحظة مميزة"></div>
+      <div class="gal-item" onclick="openLightbox('images/WhatsApp Image 2026-06-26 at 11.35.58 PM.jpeg')"><img src="images/WhatsApp Image 2026-06-26 at 11.35.58 PM.jpeg" class="gal-img" alt="لحظة مميزة"></div>
+      <div class="gal-item" onclick="openLightbox('images/WhatsApp Image 2026-06-26 at 11.35.58 PM (1).jpeg')"><img src="images/WhatsApp Image 2026-06-26 at 11.35.58 PM (1).jpeg" class="gal-img" alt="لحظة مميزة"></div>
+      <div class="gal-item" onclick="openLightbox('images/WhatsApp Image 2026-06-26 at 11.35.59 PM.jpeg')"><img src="images/WhatsApp Image 2026-06-26 at 11.35.59 PM.jpeg" class="gal-img" alt="لحظة مميزة"></div>
+      <div class="gal-item" onclick="openLightbox('images/WhatsApp Image 2026-06-26 at 11.36.13 PM.jpeg')"><img src="images/WhatsApp Image 2026-06-26 at 11.36.13 PM.jpeg" class="gal-img" alt="لحظة مميزة"></div>
+      <div class="gal-item" onclick="openLightbox('images/WhatsApp Image 2026-06-26 at 11.36.13 PM (1).jpeg')"><img src="images/WhatsApp Image 2026-06-26 at 11.36.13 PM (1).jpeg" class="gal-img" alt="لحظة مميزة"></div>
+      <div class="gal-item" onclick="openLightbox('images/WhatsApp Image 2026-06-26 at 11.36.13 PM (2).jpeg')"><img src="images/WhatsApp Image 2026-06-26 at 11.36.13 PM (2).jpeg" class="gal-img" alt="لحظة مميزة"></div>
+      <div class="gal-item" onclick="openLightbox('images/WhatsApp Image 2026-06-26 at 11.36.19 PM (1).jpeg')"><img src="images/WhatsApp Image 2026-06-26 at 11.36.19 PM (1).jpeg" class="gal-img" alt="لحظة مميزة"></div>
+      <div class="gal-item" onclick="openLightbox('images/WhatsApp Image 2026-06-26 at 11.36.19 PM (2).jpeg')"><img src="images/WhatsApp Image 2026-06-26 at 11.36.19 PM (2).jpeg" class="gal-img" alt="لحظة مميزة"></div>
+      <div class="gal-item" onclick="openLightbox('images/WhatsApp Image 2026-06-26 at 11.36.20 PM (4).jpeg')"><img src="images/WhatsApp Image 2026-06-26 at 11.36.20 PM (4).jpeg" class="gal-img" alt="لحظة مميزة"></div>
+      <div class="gal-item" onclick="openLightbox('images/WhatsApp Image 2026-06-26 at 11.36.20 PM (5).jpeg')"><img src="images/WhatsApp Image 2026-06-26 at 11.36.20 PM (5).jpeg" class="gal-img" alt="لحظة مميزة"></div>
+      <div class="gal-item" onclick="openLightbox('images/IMG20240823184135.jpg')"><img src="images/IMG20240823184135.jpg" class="gal-img" alt="لحظة مميزة"></div>
+      <div class="gal-item" onclick="openLightbox('images/IMG20241118161908.jpg')"><img src="images/IMG20241118161908.jpg" class="gal-img" alt="لحظة مميزة"></div>
+      <div class="gal-item" onclick="openLightbox('images/IMG20241125154412.jpg')"><img src="images/IMG20241125154412.jpg" class="gal-img" alt="لحظة مميزة"></div>
+      <div class="gal-item" onclick="openLightbox('images/IMG20241207125354.jpg')"><img src="images/IMG20241207125354.jpg" class="gal-img" alt="لحظة مميزة"></div>
+      <div class="gal-item" onclick="openLightbox('images/IMG20241217140323.jpg')"><img src="images/IMG20241217140323.jpg" class="gal-img" alt="لحظة مميزة"></div>
+      <div class="gal-item" onclick="openLightbox('images/IMG20250217145157.jpg')"><img src="images/IMG20250217145157.jpg" class="gal-img" alt="لحظة مميزة"></div>
+      <div class="gal-item" onclick="openLightbox('images/IMG20250217145224.jpg')"><img src="images/IMG20250217145224.jpg" class="gal-img" alt="لحظة مميزة"></div>
+      <div class="gal-item" onclick="openLightbox('images/IMG20250406180726.jpg')"><img src="images/IMG20250406180726.jpg" class="gal-img" alt="لحظة مميزة"></div>
+      <div class="gal-item" onclick="openLightbox('images/IMG20250419131047.jpg')"><img src="images/IMG20250419131047.jpg" class="gal-img" alt="لحظة مميزة"></div>
+      <div class="gal-item" onclick="openLightbox('images/IMG20250602183843.jpg')"><img src="images/IMG20250602183843.jpg" class="gal-img" alt="لحظة مميزة"></div>
     </div>
   </section>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+    <button class="lb-close" onclick="closeLightbox()">✕</button>
+    <img id="lbImg" src="" alt="صورة مميزة">
+  </div>
+
+
 
 
   <!-- ══════════════════════════════════════════
@@ -295,13 +383,13 @@
       <h2 class="finale-title">كل سنة وانتي معايا  🎀</h2>
       <p class="finale-text">
         يا أغلى حاجة عند محمد 💕<br>
-       ربنا يخليكي لياويبعد عنك اي شر <br>
+       ربنا يخليكي ليا ويبعد عنك اي شر <br>
          اتمنى اكون بسطتك يا اميرتي 
       </p>
       <button class="finale-btn" id="finaleBtn" onclick="grandFinale()">
         دوسي هنا 
       </button>
-      <p class="finale-hint">اضغطي وشوفي اسمك يتكتب في السما ✨</p>
+      <p class="finale-hint"></p>
     </div>
   </section>
 
@@ -343,6 +431,231 @@
   document.addEventListener('click',      tryAutoplay);
   document.addEventListener('touchstart', tryAutoplay);
 
+  /* Lightbox */
+  window.openLightbox = function(src) {
+    document.getElementById('lbImg').src = src;
+    const lb = document.getElementById('lightbox');
+    lb.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  };
+  window.closeLightbox = function() {
+    document.getElementById('lightbox').classList.remove('active');
+    document.body.style.overflow = '';
+  };
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') window.closeLightbox();
+  });
+
+  /* ══════════════════════════════════════
+     CURSOR TRAIL — قلوب وبريق
+  ══════════════════════════════════════ */
+  const TRAIL_CHARS = ['❤️','🌸','✨','💕','🎀','💗','⭐','🩷'];
+  let lastTrail = 0;
+  function spawnTrailParticle(x, y) {
+    const now = Date.now();
+    if (now - lastTrail < 60) return; // throttle
+    lastTrail = now;
+    const el = document.createElement('span');
+    el.className = 'cursor-particle';
+    el.textContent = TRAIL_CHARS[Math.floor(Math.random() * TRAIL_CHARS.length)];
+    el.style.left = x + 'px';
+    el.style.top  = y + 'px';
+    el.style.fontSize = (0.7 + Math.random() * 0.8) + 'rem';
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 950);
+  }
+  document.addEventListener('mousemove', e => spawnTrailParticle(e.clientX, e.clientY));
+  document.addEventListener('touchmove', e => {
+    const t = e.touches[0];
+    spawnTrailParticle(t.clientX, t.clientY);
+  }, { passive: true });
+
+  /* ══════════════════════════════════════
+     VOICE PLAYER
+  ══════════════════════════════════════ */
+  const vAudio   = document.getElementById('voiceAudio');
+  const vFill    = document.getElementById('vFill');
+  const vDot     = document.getElementById('vDot');
+  const vWave    = document.getElementById('vWave');
+  const vCurrent = document.getElementById('vCurrent');
+  const vDurEl   = document.getElementById('vDuration');
+  const vPlayIcon  = document.getElementById('vPlayIcon');
+  const vPauseIcon = document.getElementById('vPauseIcon');
+
+  function fmtTime(s) {
+    const m = Math.floor(s / 60);
+    return m + ':' + String(Math.floor(s % 60)).padStart(2, '0');
+  }
+
+  if (vAudio) {
+    vAudio.addEventListener('loadedmetadata', () => {
+      if (vDurEl) vDurEl.textContent = fmtTime(vAudio.duration);
+    });
+    vAudio.addEventListener('timeupdate', () => {
+      const pct = vAudio.duration ? (vAudio.currentTime / vAudio.duration) * 100 : 0;
+      if (vFill) vFill.style.width = pct + '%';
+      if (vDot)  vDot.style.left   = pct + '%';
+      if (vCurrent) vCurrent.textContent = fmtTime(vAudio.currentTime);
+    });
+    vAudio.addEventListener('ended', () => {
+      vPlayIcon.style.display  = 'block';
+      vPauseIcon.style.display = 'none';
+      if (vWave) vWave.classList.remove('playing');
+    });
+  }
+
+  window.toggleVoice = function() {
+    if (!vAudio) return;
+    const bg = document.getElementById('bgMusic');
+
+    function fadeVolume(audio, from, to, duration) {
+      if (!audio) return;
+      const steps    = 30;
+      const stepTime = duration / steps;
+      const stepVol  = (to - from) / steps;
+      let current    = from;
+      clearInterval(audio._fadeTimer);
+      audio._fadeTimer = setInterval(() => {
+        current += stepVol;
+        audio.volume = Math.max(0, Math.min(1, current));
+        if ((stepVol > 0 && current >= to) || (stepVol < 0 && current <= to)) {
+          audio.volume = to;
+          clearInterval(audio._fadeTimer);
+        }
+      }, stepTime);
+    }
+
+    if (vAudio.paused) {
+      vAudio.play();
+      vPlayIcon.style.display  = 'none';
+      vPauseIcon.style.display = 'block';
+      if (vWave) vWave.classList.add('playing');
+      // Duck bg music to 5%
+      if (bg && !bg.paused) fadeVolume(bg, bg.volume, 0.05, 800);
+    } else {
+      vAudio.pause();
+      vPlayIcon.style.display  = 'block';
+      vPauseIcon.style.display = 'none';
+      if (vWave) vWave.classList.remove('playing');
+      // Restore bg music
+      if (bg && !bg.paused) fadeVolume(bg, bg.volume, 0.6, 1200);
+    }
+  };
+
+  // When voice ends, restore bg music automatically
+  if (vAudio) {
+    vAudio.addEventListener('ended', () => {
+      const bg = document.getElementById('bgMusic');
+      if (bg && !bg.paused) {
+        const fadeVolume = (audio, from, to, duration) => {
+          const steps = 30, stepTime = duration/steps, stepVol = (to-from)/steps;
+          let cur = from;
+          clearInterval(audio._fadeTimer);
+          audio._fadeTimer = setInterval(() => {
+            cur += stepVol; audio.volume = Math.max(0, Math.min(1, cur));
+            if ((stepVol>0&&cur>=to)||(stepVol<0&&cur<=to)) { audio.volume=to; clearInterval(audio._fadeTimer); }
+          }, stepTime);
+        };
+        fadeVolume(bg, bg.volume, 0.6, 1400);
+      }
+    });
+  }
+
+  window.seekVoice = function(e) {
+    if (!vAudio || !vAudio.duration) return;
+    const wrap = document.getElementById('vProgressWrap');
+    const rect = wrap.getBoundingClientRect();
+    const pct  = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+    vAudio.currentTime = pct * vAudio.duration;
+  };
+
+  /* ══════════════════════════════════════
+     AUTO-SCROLL GALLERY
+  ══════════════════════════════════════ */
+  /* ══════════════════════════════════════
+     AUTO-SCROLL GALLERY
+  ══════════════════════════════════════ */
+  (function initAutoScroll() {
+    const strip = document.getElementById('galleryStrip');
+    const section = document.getElementById('s-gallery');
+    if (!strip || !section) return;
+
+    // States: 'scroll' | 'end-pause' | 'start-pause'
+    let state       = 'scroll';
+    let pauseCount  = 0;
+    const PAUSE_END   = 150; // ticks ≈ 2.5s pause at end (right side)
+    const PAUSE_START = 80;  // ticks ≈ 1.3s pause at start (left side)
+    let userPaused  = false;
+    let initialized = false;
+    let isIntersecting = false;
+
+    function tick() {
+      if (!isIntersecting || userPaused) return;
+
+      const maxScroll = strip.scrollWidth - strip.clientWidth;
+      if (maxScroll <= 0) return; // images not loaded yet
+
+      // Initially set position to far left (negative maxScroll in RTL)
+      if (!initialized) {
+        strip.scrollLeft = -maxScroll;
+        initialized = true;
+        state = 'start-pause';
+        pauseCount = 0;
+        return;
+      }
+
+      if (state === 'scroll') {
+        strip.scrollLeft += 1; // scroll towards 0 (right side)
+        if (strip.scrollLeft >= -1) {
+          state = 'end-pause';
+          pauseCount = 0;
+        }
+
+      } else if (state === 'end-pause') {
+        pauseCount++;
+        if (pauseCount >= PAUSE_END) {
+          strip.scrollTo({ left: -maxScroll, behavior: 'smooth' });
+          state = 'start-pause';
+          pauseCount = 0;
+        }
+
+      } else if (state === 'start-pause') {
+        pauseCount++;
+        if (pauseCount >= PAUSE_START) {
+          state = 'scroll';
+        }
+      }
+    }
+
+    const timer = setInterval(tick, 16);
+
+    // Start auto-scroll ONLY when section is visible
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        isIntersecting = entry.isIntersecting;
+        // When entering the viewport, reset to far left so the animation starts from the beginning
+        if (entry.isIntersecting) {
+          const maxScroll = strip.scrollWidth - strip.clientWidth;
+          if (maxScroll > 0) {
+            strip.scrollLeft = -maxScroll;
+            initialized = true;
+            state = 'start-pause';
+            pauseCount = 0;
+          }
+        }
+      });
+    }, { threshold: 0.15 });
+
+    observer.observe(section);
+
+    // Pause on hover/touch
+    strip.addEventListener('mouseenter', () => { userPaused = true; });
+    strip.addEventListener('mouseleave', () => { userPaused = false; });
+    strip.addEventListener('touchstart', () => { userPaused = true; }, { passive: true });
+    strip.addEventListener('touchend',   () => { setTimeout(() => { userPaused = false; }, 2000); });
+  })();
+
+
   /* ══════════════════════════════════════
      LOCK SCREEN — Countdown + Password
      الباسورد: تبارك  ← غيّره هنا لو عايز
@@ -366,7 +679,7 @@
       err.textContent = '';
       unlockSite(false);
     } else {
-      err.textContent = '❌ الباسورد غلط، جرب تاني 💕';
+      err.textContent = 'غلط يا شطوره💕';
       const inp = document.getElementById('lockInput');
       inp.value = '';
       inp.classList.add('shake');
@@ -381,7 +694,7 @@
     if (!grid) return;
 
     if (diff <= 0) {
-      grid.innerHTML = '<div class="cd-ready">🎉 جه الوقت! اكتبي الباسورد 🎉</div>';
+      grid.innerHTML = '<div class="cd-ready">🎉 يلا بينااا اكتبي الباسورد 🎉</div>';
       return;
     }
 

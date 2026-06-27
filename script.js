@@ -145,19 +145,21 @@ class Balloon {
   constructor(startMid = false) {
     const p = PALETTES[Math.floor(Math.random() * PALETTES.length)];
     this.p      = p;
-    this.r      = 34 + Math.random() * 22;
-    this.x      = Math.random() * balloonCanvas.width;
+    this.r      = 65 + Math.random() * 25;   // much bigger
+    this.x      = (0.1 + Math.random() * 0.8) * balloonCanvas.width;
     this.y      = startMid
-                  ? balloonCanvas.height * (0.25 + Math.random() * 0.55)
-                  : balloonCanvas.height + 100;
-    this.speedY = 0.22 + Math.random() * 0.25;
+                  ? balloonCanvas.height * (0.2 + Math.random() * 0.6)
+                  : balloonCanvas.height + 120;
+    this.speedY = 0.10 + Math.random() * 0.12;  // slower
     this.wob    = Math.random() * Math.PI * 2;
-    this.wobF   = 0.005 + Math.random() * 0.006;
-    this.wobA   = 10 + Math.random() * 14;
-    this.opacity= startMid ? 0.5 : 0;
+    this.wobF   = 0.003 + Math.random() * 0.003; // gentle sway
+    this.wobA   = 8 + Math.random() * 10;
+    this.opacity= startMid ? 0.75 : 0;
     this.fadeIn = true;
-    this.strLen = this.r * 3.3;
-    this.img    = bImgs[Math.floor(Math.random() * bImgs.length)];
+    this.strLen = this.r * 3.5;
+    // Pick a random image, cycle through all
+    this.imgIdx = Math.floor(Math.random() * bImgs.length);
+    this.img    = bImgs[this.imgIdx];
   }
   update() {
     this.y   -= this.speedY;
@@ -188,17 +190,24 @@ class Balloon {
     bctx.fillStyle = g; bctx.fill();
     
     bctx.save();
-    bctx.clip(); // clips to the body path we just drew
+    bctx.clip(); // clips to the body ellipse
     if (this.img && this.img.complete && this.img.width > 0) {
-      const iw = this.img.width, ih = this.img.height;
-      // Use contain so the full image is visible
-      const scale = Math.min((r*1.75) / iw, (r*1.22*1.85) / ih);
+      // Cover-fill: scale so image fills the balloon completely
+      const iw = this.img.naturalWidth  || this.img.width;
+      const ih = this.img.naturalHeight || this.img.height;
+      const bw = r * 2, bh = r * 2 * 1.22;  // balloon bounding box
+      const scale = Math.max(bw / iw, bh / ih);
       const dw = iw * scale, dh = ih * scale;
-      bctx.globalAlpha = Math.max(0, this.opacity);
-      // Optional subtle shadow behind the image inside the balloon
-      bctx.shadowColor = 'rgba(0,0,0,0.4)';
-      bctx.shadowBlur = 8;
+      bctx.globalAlpha = Math.max(0, this.opacity) * 0.92;
+      bctx.shadowBlur = 0;
       bctx.drawImage(this.img, x - dw/2, y - dh/2, dw, dh);
+      // Subtle pink tint edge to blend with balloon shape
+      const tint = bctx.createRadialGradient(x, y, r*0.55, x, y, r*1.1);
+      tint.addColorStop(0, 'rgba(0,0,0,0)');
+      tint.addColorStop(1, this.p.body + 'aa');
+      bctx.fillStyle = tint;
+      bctx.globalAlpha = Math.max(0, this.opacity) * 0.6;
+      bctx.fill();
     }
     bctx.restore();
 
@@ -233,11 +242,16 @@ class Balloon {
 
 let balloons = [];
 let lastBalloonTs = 0;
-for (let i = 0; i < 12; i++) balloons.push(new Balloon(true));
+// Start with 4 well-spaced balloons
+for (let i = 0; i < 4; i++) {
+  const b = new Balloon(true);
+  b.x = (i * 0.25 + 0.1) * balloonCanvas.width; // spread evenly
+  balloons.push(b);
+}
 
 function animateBalloons(ts) {
   bctx.clearRect(0, 0, balloonCanvas.width, balloonCanvas.height);
-  if (ts - lastBalloonTs > 1000 && balloons.length < 20) {
+  if (ts - lastBalloonTs > 4500 && balloons.length < 5) {
     balloons.push(new Balloon());
     lastBalloonTs = ts;
   }
@@ -455,19 +469,18 @@ class FWParticle {
     this.ty    = ty;   // target y
     this.delay = delay;
     this.x     = Math.random() * fwCanvas.width;
-    this.y     = fwCanvas.height * (.7 + Math.random() * .3);
+    this.y     = fwCanvas.height + 50 + Math.random() * 100;
     this.color = FW_COLORS[Math.floor(Math.random() * FW_COLORS.length)];
-    this.r     = Math.random() * 3 + 2;
+    this.r     = Math.random() * 2 + 3.5; // cute refined balloon radius (3.5px to 5.5px)
     this.alpha = 0;
     this.t     = 0;
     this.done  = false;
   }
   update(now) {
     if (now < this.delay) return;
-    this.t = Math.min(1, this.t + 0.022);
-    const ease = 1 - Math.pow(1 - this.t, 3);
-    this.x = this.x + (this.tx - this.x) * 0.06;
-    this.y = this.y + (this.ty - this.y) * 0.06;
+    this.t = Math.min(1, this.t + 0.02);
+    this.x = this.x + (this.tx - this.x) * 0.08;
+    this.y = this.y + (this.ty - this.y) * 0.08;
     this.alpha = Math.min(1, this.t * 3);
     if (this.t >= 1) {
       this.x = this.tx; this.y = this.ty;
@@ -477,12 +490,37 @@ class FWParticle {
   draw() {
     fwCtx.save();
     fwCtx.globalAlpha = this.alpha;
+    const { x, y, r } = this;
+
+    // Balloon body (ellipse)
     fwCtx.beginPath();
-    fwCtx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+    fwCtx.ellipse(x, y, r, r * 1.25, 0, 0, Math.PI * 2);
     fwCtx.fillStyle = this.color;
-    fwCtx.shadowBlur  = 8;
+    fwCtx.shadowBlur = 5;
     fwCtx.shadowColor = this.color;
     fwCtx.fill();
+
+    // Knot (small triangle at bottom)
+    fwCtx.beginPath();
+    const ky = y + r * 1.25;
+    fwCtx.moveTo(x, ky);
+    fwCtx.lineTo(x - 2, ky + 3);
+    fwCtx.lineTo(x + 2, ky + 3);
+    fwCtx.closePath();
+    fwCtx.fillStyle = this.color;
+    fwCtx.fill();
+
+    // String (hanging line)
+    fwCtx.beginPath();
+    fwCtx.moveTo(x, ky + 2);
+    fwCtx.quadraticCurveTo(
+      x + Math.sin(x * 0.05) * 3, ky + r * 1.5,
+      x + Math.sin(x * 0.02) * 1.5, ky + r * 2.5
+    );
+    fwCtx.strokeStyle = 'rgba(255,255,255,0.4)';
+    fwCtx.lineWidth = 0.7;
+    fwCtx.stroke();
+
     fwCtx.restore();
   }
 }
@@ -490,27 +528,33 @@ class FWParticle {
 // Build particle positions from canvas text rendering
 function buildNameParticles(name) {
   const offscreen = document.createElement('canvas');
-  const W = Math.min(window.innerWidth * .85, 700);
+  const W = Math.min(window.innerWidth * .85, 680);
   offscreen.width  = W;
-  offscreen.height = 160;
+  offscreen.height = 140;
   const oc = offscreen.getContext('2d');
-  const fs  = Math.min(W / (name.length * 0.8), 110);
+  const fs  = Math.min(W / (name.length * 0.8), 105);
   oc.font = `900 ${fs}px Cairo, sans-serif`;
   oc.fillStyle = '#fff';
   oc.textAlign = 'center';
   oc.textBaseline = 'middle';
-  oc.fillText(name, W/2, 80);
+  oc.fillText(name, W/2, 70);
 
-  const imgData = oc.getImageData(0, 0, W, 160).data;
+  const imgData = oc.getImageData(0, 0, W, 140).data;
   const points  = [];
-  const step    = 5;
-  for (let y = 0; y < 160; y += step) {
+  const step    = 5; // Denser step for much sharper letter shapes
+  
+  // Find current viewport position of the finale title dynamically
+  const titleEl = document.querySelector('.finale-title');
+  const rect = titleEl ? titleEl.getBoundingClientRect() : null;
+  const targetX = rect ? rect.left + rect.width / 2 : window.innerWidth / 2;
+  const targetY = rect ? rect.top - 70 : window.innerHeight * 0.28; // Lowered to 70px to sit perfectly above title
+
+  for (let y = 0; y < 140; y += step) {
     for (let x = 0; x < W; x += step) {
       const i = (y * W + x) * 4;
       if (imgData[i + 3] > 120) {
-        // Map offscreen coords to center of viewport
-        const cx = (window.innerWidth  - W) / 2 + x;
-        const cy = window.innerHeight  * 0.28 + (y - 80);
+        const cx = targetX - (W / 2) + x;
+        const cy = targetY + (y - 70);
         points.push([cx, cy]);
       }
     }
@@ -528,14 +572,14 @@ function runFireworks() {
   fwStartTime = performance.now();
 
   const pts = buildNameParticles(NAME);
-  // Randomly sample up to 600 points so it's not too heavy
-  const sampled = pts.sort(() => Math.random() - .5).slice(0, 600);
+  // Sample up to 580 points to get highly detailed outlines without lag
+  const sampled = pts.sort(() => Math.random() - .5).slice(0, 580);
 
   fwParticles = sampled.map((pt, i) =>
-    new FWParticle(pt[0], pt[1], i * 2.5)   // stagger launch
+    new FWParticle(pt[0], pt[1], i * 1.5) // faster stagger launch
   );
 
-  // Stage 1: launch confetti before name appears
+  // Confetti burst
   [.15, .5, .85].forEach((rx, i) => {
     setTimeout(() => {
       window.burstConfetti(rx * window.innerWidth, window.innerHeight * .6, 40);
@@ -543,7 +587,7 @@ function runFireworks() {
   });
 
   const btn = document.getElementById('finaleBtn');
-  if (btn) btn.textContent = '✨ مبروك يا تبارك!';
+  if (btn) btn.textContent = ' 😍هعع رسمتي بالبلالين يارب تعجبكم حبايب قلبي';
 
   let allDone = false;
   (function loop(now) {
@@ -553,30 +597,10 @@ function runFireworks() {
 
     if (!allDone && fwParticles.every(p => p.done)) {
       allDone = true;
-      // Hold name for 2.5s then fade out
-      setTimeout(() => {
-        let fadeAlpha = 1;
-        (function fadeOut() {
-          fwCtx.clearRect(0, 0, fwCanvas.width, fwCanvas.height);
-          fadeAlpha -= 0.018;
-          if (fadeAlpha > 0) {
-            fwParticles.forEach(p => {
-              fwCtx.save();
-              fwCtx.globalAlpha = fadeAlpha;
-              fwCtx.beginPath();
-              fwCtx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-              fwCtx.fillStyle = p.color;
-              fwCtx.fill();
-              fwCtx.restore();
-            });
-            requestAnimationFrame(fadeOut);
-          } else {
-            fwCtx.clearRect(0, 0, fwCanvas.width, fwCanvas.height);
-            fwRunning = false;
-          }
-        })();
-      }, 2500);
-      return; // stop main loop when done
+      // Draw static name permanently and stop the loop
+      fwCtx.clearRect(0, 0, fwCanvas.width, fwCanvas.height);
+      fwParticles.forEach(p => p.draw());
+      return;
     }
 
     if (!allDone) requestAnimationFrame(loop);
