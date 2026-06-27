@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🎀 عيد ميلاد الدلوعة </title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <canvas id="starCanvas"></canvas>
+  <canvas id="balloonCanvas"></canvas>
+  <canvas id="confettiCanvas"></canvas>
+  <canvas id="fireworksCanvas"></canvas>
+
+  <!-- ══════════════════════════════════════════
+       LOCK SCREEN — Countdown + Password
+  ══════════════════════════════════════════ -->
+  <div id="lockScreen" class="lock-screen">
+
+    <!-- نجوم خلفية للـ lock screen -->
+    <div class="lock-stars" id="lockStars"></div>
+
+    <div class="lock-card">
+      <div class="lock-emoji">🎀</div>
+      <h2 class="lock-title">مفاجأة بتستناكِ</h2>
+      <p class="lock-sub">في يوم ٢ يوليو الساعة ١٢ الليل</p>
+
+      <div class="cd-grid" id="cdGrid">
+        <div class="cd-box">
+          <span class="cd-num" id="cdDays">00</span>
+          <span class="cd-lbl">يوم</span>
+        </div>
+        <div class="cd-colon">:</div>
+        <div class="cd-box">
+          <span class="cd-num" id="cdHours">00</span>
+          <span class="cd-lbl">ساعة</span>
+        </div>
+        <div class="cd-colon">:</div>
+        <div class="cd-box">
+          <span class="cd-num" id="cdMins">00</span>
+          <span class="cd-lbl">دقيقة</span>
+        </div>
+        <div class="cd-colon">:</div>
+        <div class="cd-box">
+          <span class="cd-num" id="cdSecs">00</span>
+          <span class="cd-lbl">ثانية</span>
+        </div>
+      </div>
+
+      <div class="lock-divider"></div>
+
+      <p class="lock-pass-hint">✦ عندك الباسورد؟ افتحي المفاجأة دلوقتي ✦</p>
+      <div class="lock-row">
+        <input
+          type="password"
+          id="lockInput"
+          class="lock-input"
+          placeholder="الباسورد هنا..."
+          autocomplete="off"
+          onkeydown="if(event.key==='Enter')checkLock()"
+        >
+        <button class="lock-open-btn" onclick="checkLock()">🔓</button>
+      </div>
+      <p class="lock-err" id="lockErr"></p>
+    </div>
+  </div>
+
+  <!-- ══ SITE CONTENT (blurred while locked) ══ -->
+  <div id="siteContent" class="site-blurred">
+
+  <!-- ★ موسيقى -->
+  <audio id="bgMusic" loop preload="auto">
+    <source src="alleila.mp3" type="audio/mpeg">
+  </audio>
+
+  <!-- ★ زرار الموسيقى -->
+  <div class="music-pill" id="musicPill">
+    <button id="musicBtn" onclick="toggleMusic()" aria-label="تشغيل الموسيقى">
+      <svg class="icon-play"  viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+      <svg class="icon-pause" viewBox="0 0 24 24" fill="currentColor" style="display:none"><path d="M6 19h4V5H6zm8-14v14h4V5z"/></svg>
+    </button>
+    <div class="music-bars" id="musicBars">
+      <span></span><span></span><span></span><span></span>
+    </div>
+    <span class="music-label">❤️ Our Fav Song </span>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════
+       القسم ١ — الافتتاح السينمائي
+  ══════════════════════════════════════════ -->
+  <section class="s-opener" id="s-opener">
+    <div class="opener-center">
+
+
+      <h1 class="opener-title">
+        <span class="letter-wrap" aria-label="كل سنة وانتي طيبة يا تبروكتي"></span>
+      </h1>
+
+
+      <!-- المظروف التفاعلي -->
+      <div class="envelope-wrap" id="envelopeWrap" tabindex="0" role="button" aria-label="افتحي المفاجأة">
+        <div class="envelope" id="envelope">
+          <div class="env-flap"></div>
+          <div class="env-body">
+            <div class="env-heart">💌</div>
+          </div>
+          <div class="env-letter" id="envLetter">
+            <p class="letter-text">
+              كل سنة وانتي أجمل حاجة حصلت في حياتي ❤️
+              أحلى وأغلى تبروكة يا وِلاد،
+              اللي ابتسامتها بس كفاية تخلي
+              الدنيا كلها تضحكلي 🌸<br><br>
+              ربنا يحققلك كل اللي نفسك فيه
+              يا روحي، ويجمعنا على خير قريب 💕<br><br>
+              شكرًا إنك في حياتي،
+              وكل سنة وانتي حبيبتي وخطيبتيي —
+              بحبك أوي وعقبال ما نحتفل بكل أعياد
+              ميلادك وإحنا مع بعض في بيتنا 🎂🎉❤️
+            </p>
+            <div class="letter-sig">محمد نزار </div>
+          </div>
+        </div>
+        <p class="env-hint" id="envHint">✦ اضغطي هنا عشان تفتحي المفاجأة ✦</p>
+      </div>
+
+      <div class="scroll-cue" id="scrollCue" style="opacity:0;">
+        <span>في ستّر اكتشفي</span>
+        <div class="scroll-cue-line"></div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════════════════════
+       القسم ٢ — الكيكة التفاعلية
+  ══════════════════════════════════════════ -->
+  <section class="s-cake reveal-section" id="s-cake">
+    <div class="section-label">🎂 اطفئي الشموع</div>
+    <h2 class="section-title">كل شمعة أمنية</h2>
+    <p class="section-sub">اضغطي على كل شمعة عشان تطفيها وتتحقق أمنيتها ✨</p>
+
+    <div class="cake-scene">
+      <div class="cake-plate">
+        <img src="birthday_cake.png" class="cake-img" alt="كيكة عيد الميلاد" onerror="this.style.display='none'">
+        <div class="candles-row" id="candlesRow">
+          <div class="candle" data-wish="الصحة والسعادة دايمًا 🌸">
+            <div class="candle-flame"><div class="flame-inner"></div></div>
+            <div class="candle-stick pink"></div>
+          </div>
+          <div class="candle" data-wish="تتفوقي وتنجحي في كل حاجة ✨">
+            <div class="candle-flame"><div class="flame-inner"></div></div>
+            <div class="candle-stick purple"></div>
+          </div>
+          <div class="candle" data-wish="أمانيكِ كلها تتحقق بإذن الله 💖">
+            <div class="candle-flame"><div class="flame-inner"></div></div>
+            <div class="candle-stick gold"></div>
+          </div>
+          <div class="candle" data-wish="السعادة تكون صاحبتك على طول 👑">
+            <div class="candle-flame"><div class="flame-inner"></div></div>
+            <div class="candle-stick pink"></div>
+          </div>
+          <div class="candle" data-wish="كل سنة وإنتِ بألف خير يا قمر 🎀">
+            <div class="candle-flame"><div class="flame-inner"></div></div>
+            <div class="candle-stick purple"></div>
+          </div>
+        </div>
+      </div>
+      <div class="wish-popup" id="wishPopup"></div>
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════════════════════
+       القسم ٣ — الكارتات التفاعلية
+  ══════════════════════════════════════════ -->
+  <section class="s-cards reveal-section" id="s-cards">
+    <div class="section-label">💌 رسايل من القلب</div>
+    <h2 class="section-title">كلام مخصوص ليكي</h2>
+    <p class="section-sub">اقلبي كل كارت عشان تقري الرسالة 🌸</p>
+
+    <div class="cards-grid">
+
+      <div class="flip-card" tabindex="0">
+        <div class="flip-card-inner">
+          <div class="flip-front">
+            <div class="flip-icon">🌸</div>
+            <p class="flip-front-text">يا نور عيوننا</p>
+            <span class="flip-hint">اضغطي عشان تقري ↓</span>
+          </div>
+          <div class="flip-back">
+            <p>في اليوم ده انا مش عارف اوصف احساسي من كتر الفرحة بس انتي أحلى حاجة في الدنيا و وجودك ده نعمة كبيرة 💕</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="flip-card" tabindex="0">
+        <div class="flip-card-inner">
+          <div class="flip-front">
+            <div class="flip-icon">😄</div>
+            <p class="flip-front-text">ضحكتك دي إيه!</p>
+            <span class="flip-hint">اضغطي عشان تقري ↓</span>
+          </div>
+          <div class="flip-back">
+            <p>ضحكتك بتنوّر اي مكان حرفيا وطريقتك وكلامك العسل . اي حد انتي في حياته محظوظ جدا 🌟</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="flip-card" tabindex="0">
+        <div class="flip-card-inner">
+          <div class="flip-front">
+            <div class="flip-icon">💖</div>
+            <p class="flip-front-text">أتمنالك من قلبي</p>
+            <span class="flip-hint">اضغطي عشان تقري ↓</span>
+          </div>
+          <div class="flip-back">
+            <p>ربنا يحقق كل أمانيكِ ويرزقك بكل ما تتمنيه، ويخليكي دايمًا فرحانة وضاحكة وعيشة 💕</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="flip-card" tabindex="0">
+        <div class="flip-card-inner">
+          <div class="flip-front">
+            <div class="flip-icon">👑</div>
+            <p class="flip-front-text">وعد مني</p>
+            <span class="flip-hint">اضغطي عشان تقري ↓</span>
+          </div>
+          <div class="flip-back">
+            <p>هنكون دايمًا جنبك وهندعيلك من قلبنا. ربنا يكرمك ويعلي شأنك ويجعل عمرك كله نور وسعادة 🌟</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════════════════════
+       القسم ٤ — جاليري الصور
+  ══════════════════════════════════════════ -->
+  <section class="s-gallery reveal-section" id="s-gallery">
+    <div class="section-label">🖼️ لحظاتنا</div>
+    <h2 class="section-title">ذكريات مش هننساها</h2>
+    <p class="section-sub">كل صورة بتحكي قصة حلوة 💕</p>
+
+    <div class="gallery-mosaic">
+      <div class="gal-item g1"><img src="images/IMG20250217145224.jpg" class="gal-img" alt="لحظة مميزة"></div>
+      <div class="gal-item g2"><img src="images/WhatsApp Image 2026-06-26 at 11.36.16 PM.jpeg" class="gal-img" alt="أجمل ذكرياتنا"></div>
+      <div class="gal-item g3"><img src="images/WhatsApp Image 2026-06-26 at 11.36.13 PM.jpeg" class="gal-img" alt="أيام متتنسيش"></div>
+      <div class="gal-item g4"><img src="images/WhatsApp Image 2026-06-26 at 11.36.21 PM.jpeg" class="gal-img" alt="ابتسامة قمر"></div>
+      <div class="gal-item g5"><img src="images/WhatsApp Image 2026-06-26 at 11.36.10 PM.jpeg" class="gal-img" alt="أحلى الأوقات"></div>
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════════════════════
+       القسم ٥ — فقاعة الأمنية
+  ══════════════════════════════════════════ -->
+  <section class="s-wish reveal-section" id="s-wish">
+    <div class="section-label">🫧 فقاعة الأمنية</div>
+    <h2 class="section-title">اكتبي امنتيك</h2>
+    <p class="section-sub">اكتبي أمنية عيد ميلادك واضغطي عشان تطير للسما </p>
+
+    <div class="wish-jar-area">
+      <div class="wish-input-wrap">
+        <input
+          type="text"
+          id="wishInput"
+          class="wish-input"
+          placeholder="اكتبي أمنيتكِ هنا..."
+          maxlength="60"
+          autocomplete="off"
+          onkeydown="if(event.key==='Enter')launchWish()"
+        >
+        <button class="wish-launch-btn" onclick="launchWish()">
+          💫 طيريها يا مزه
+        </button>
+      </div>
+      <div class="wish-bubbles-container" id="wishBubblesContainer"></div>
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════════════════════
+       القسم ٦ — الختام الكبير
+  ══════════════════════════════════════════ -->
+  <section class="s-finale reveal-section" id="s-finale">
+    <div class="finale-content">
+      <h2 class="finale-title">كل سنة وانتي معايا  🎀</h2>
+      <p class="finale-text">
+        يا أغلى حاجة عند محمد 💕<br>
+       ربنا يخليكي لياويبعد عنك اي شر <br>
+         اتمنى اكون بسطتك يا اميرتي 
+      </p>
+      <button class="finale-btn" id="finaleBtn" onclick="grandFinale()">
+        دوسي هنا 
+      </button>
+      <p class="finale-hint">اضغطي وشوفي اسمك يتكتب في السما ✨</p>
+    </div>
+  </section>
+
+
+
+  </div><!-- /siteContent -->
+
+  <script src="script.js"></script>
+
+  <script>
+  const audio  = document.getElementById('bgMusic');
+  let _playing = false;
+
+  function setMusicState(on) {
+    _playing = on;
+    const pill  = document.getElementById('musicPill');
+    const bars  = document.getElementById('musicBars');
+    const play  = document.querySelector('.icon-play');
+    const pause = document.querySelector('.icon-pause');
+    pill.classList.toggle('playing', on);
+    bars.classList.toggle('active', on);
+    play.style.display  = on ? 'none'  : 'block';
+    pause.style.display = on ? 'block' : 'none';
+  }
+
+  window.toggleMusic = function() {
+    if (_playing) { audio.pause(); setMusicState(false); }
+    else          { audio.volume = 0.6; audio.play().then(()=>setMusicState(true)).catch(()=>{}); }
+  };
+
+  function tryAutoplay() {
+    if (!_playing) {
+      audio.volume = 0.6;
+      audio.play().then(()=>setMusicState(true)).catch(()=>{});
+    }
+    document.removeEventListener('click',      tryAutoplay);
+    document.removeEventListener('touchstart', tryAutoplay);
+  }
+  document.addEventListener('click',      tryAutoplay);
+  document.addEventListener('touchstart', tryAutoplay);
+
+  /* ══════════════════════════════════════
+     LOCK SCREEN — Countdown + Password
+     الباسورد: تبارك  ← غيّره هنا لو عايز
+  ══════════════════════════════════════ */
+  const BIRTHDAY_TS  = new Date('2026-07-02T00:00:00').getTime();
+  const LOCK_PASS    = 'تبارك';   // ← الباسورد
+
+  function unlockSite(instant) {
+    const lock    = document.getElementById('lockScreen');
+    const content = document.getElementById('siteContent');
+    content.classList.remove('site-blurred');
+    if (instant) { lock.style.display = 'none'; return; }
+    lock.classList.add('lock-fadeout');
+    setTimeout(() => { lock.style.display = 'none'; }, 900);
+  }
+
+  window.checkLock = function() {
+    const val = document.getElementById('lockInput').value.trim();
+    const err = document.getElementById('lockErr');
+    if (val === LOCK_PASS) {
+      err.textContent = '';
+      unlockSite(false);
+    } else {
+      err.textContent = '❌ الباسورد غلط، جرب تاني 💕';
+      const inp = document.getElementById('lockInput');
+      inp.value = '';
+      inp.classList.add('shake');
+      setTimeout(() => inp.classList.remove('shake'), 600);
+    }
+  };
+
+  (function tickCountdown() {
+    const now  = Date.now();
+    const diff = BIRTHDAY_TS - now;
+    const grid = document.getElementById('cdGrid');
+    if (!grid) return;
+
+    if (diff <= 0) {
+      grid.innerHTML = '<div class="cd-ready">🎉 جه الوقت! اكتبي الباسورد 🎉</div>';
+      return;
+    }
+
+    const d = Math.floor(diff / 864e5);
+    const h = Math.floor((diff % 864e5) / 36e5);
+    const m = Math.floor((diff % 36e5)  / 6e4);
+    const s = Math.floor((diff % 6e4)   / 1e3);
+
+    const pad = n => String(n).padStart(2,'0');
+    document.getElementById('cdDays').textContent  = pad(d);
+    document.getElementById('cdHours').textContent = pad(h);
+    document.getElementById('cdMins').textContent  = pad(m);
+    document.getElementById('cdSecs').textContent  = pad(s);
+
+    setTimeout(tickCountdown, 1000);
+  })();
+
+  /* بذور للنجوم الزينة في الـ lock screen */
+  (function spawnLockStars() {
+    const c = document.getElementById('lockStars');
+    if (!c) return;
+    for (let i = 0; i < 55; i++) {
+      const s = document.createElement('span');
+      s.style.cssText = `
+        position:absolute;
+        width:${Math.random()*2+1}px; height:${Math.random()*2+1}px;
+        border-radius:50%; background:rgba(255,220,240,${Math.random()*.7+.2});
+        top:${Math.random()*100}%; left:${Math.random()*100}%;
+        animation:starTwinkle ${(Math.random()*3+2).toFixed(1)}s ease-in-out
+                  ${(Math.random()*3).toFixed(1)}s infinite alternate;
+      `;
+      c.appendChild(s);
+    }
+  })();
+  </script>
+</body>
+</html>
