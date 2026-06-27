@@ -667,6 +667,13 @@
     const lock    = document.getElementById('lockScreen');
     const content = document.getElementById('siteContent');
     content.classList.remove('site-blurred');
+    
+    // Play music when site is successfully unlocked
+    if (!_playing) {
+      audio.volume = 0.6;
+      audio.play().then(() => setMusicState(true)).catch((e) => console.log("Music play blocked:", e));
+    }
+
     if (instant) { lock.style.display = 'none'; return; }
     lock.classList.add('lock-fadeout');
     setTimeout(() => { lock.style.display = 'none'; }, 900);
