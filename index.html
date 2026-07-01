@@ -420,16 +420,7 @@
     else          { audio.volume = 0.6; audio.play().then(()=>setMusicState(true)).catch(()=>{}); }
   };
 
-  function tryAutoplay() {
-    if (!_playing) {
-      audio.volume = 0.6;
-      audio.play().then(()=>setMusicState(true)).catch(()=>{});
-    }
-    document.removeEventListener('click',      tryAutoplay);
-    document.removeEventListener('touchstart', tryAutoplay);
-  }
-  document.addEventListener('click',      tryAutoplay);
-  document.addEventListener('touchstart', tryAutoplay);
+  // Music only starts on successful unlock — see unlockSite()
 
   /* Lightbox */
   window.openLightbox = function(src) {
