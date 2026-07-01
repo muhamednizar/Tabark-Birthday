@@ -156,15 +156,15 @@
             <div class="candle-flame"><div class="flame-inner"></div></div>
             <div class="candle-stick purple"></div>
           </div>
-          <div class="candle" data-wish="أمانيكِ كلها تتحقق بإذن الله 💖">
+          <div class="candle" data-wish="امنياتك كلها تتحقق بإذن الله 💖">
             <div class="candle-flame"><div class="flame-inner"></div></div>
             <div class="candle-stick gold"></div>
           </div>
-          <div class="candle" data-wish="السعادة تكون صاحبتك على طول 👑">
+          <div class="candle" data-wish=" تكوني سعيدة علطول 👑">
             <div class="candle-flame"><div class="flame-inner"></div></div>
             <div class="candle-stick pink"></div>
           </div>
-          <div class="candle" data-wish="كل سنة وإنتِ بألف خير يا قمر 🎀">
+          <div class="candle" data-wish="كل سنة وانتي بألف خير يا عسولتي 🎀">
             <div class="candle-flame"><div class="flame-inner"></div></div>
             <div class="candle-stick purple"></div>
           </div>
@@ -673,6 +673,21 @@
   window.checkLock = function() {
     const val = document.getElementById('lockInput').value.trim();
     const err = document.getElementById('lockErr');
+
+    // 🔒 Time gate — password only works after midnight July 2nd
+    if (Date.now() < BIRTHDAY_TS) {
+      const diff = BIRTHDAY_TS - Date.now();
+      const h = Math.floor(diff / 36e5);
+      const m = Math.floor((diff % 36e5) / 6e4);
+      const s = Math.floor((diff % 6e4) / 1e3);
+      err.textContent = `⏳ استني لحد الساعة 12 الليل — باقي ${h}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')} 💕`;
+      const inp = document.getElementById('lockInput');
+      inp.value = '';
+      inp.classList.add('shake');
+      setTimeout(() => inp.classList.remove('shake'), 600);
+      return;
+    }
+
     if (val === LOCK_PASS) {
       err.textContent = '';
       unlockSite(false);
